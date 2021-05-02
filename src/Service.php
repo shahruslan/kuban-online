@@ -15,12 +15,12 @@ class Service
     public function __construct()
     {
         $this->api = new Api();
-        $this->cache = new FilesystemAdapter('', 120, 'cache');
+        $this->cache = new FilesystemAdapter('', 3600, 'cache');
     }
 
-    public function check(string $doctorId)
+    public function check(string $doctorId, bool $force = false)
     {
-        if ($this->checkDate() == false) {
+        if ($force === true && $this->checkDate() == false) {
             return;
         }
 
@@ -34,8 +34,10 @@ class Service
 
         $prevStatus = $this->getPrevStatus($status, $doctorId);
 
-        if ($prevStatus == null || $prevStatus->status() != $status->status()) {
-            $this->notify($status->changeStatusText($prevStatus));
+        if ($force === true) {
+            $this->notify($status->statusText());
+        } elseif ($prevStatus == null || $prevStatus->status() != $status->status()) {
+            $this->notify($status->statusText($prevStatus));
         }
     }
 

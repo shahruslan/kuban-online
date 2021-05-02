@@ -33,7 +33,7 @@ class Status
         return $this->status;
     }
 
-    public function changeStatusText(?Status $prevStatus): string
+    public function statusText(?Status $prevStatus = null): string
     {
         $data = [
             '1-2' => 'Запись закрылась',

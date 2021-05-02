@@ -27,6 +27,11 @@ class Api
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
+        if (env('DEBUG', false)) {
+            $stream = fopen('php://temp', 'w+');
+            curl_setopt($ch, CURLOPT_VERBOSE, true);
+            curl_setopt($ch, CURLOPT_STDERR, $stream);
+        }
 
         $this->response = curl_exec($ch);
         $error = curl_error($ch);
@@ -49,6 +54,14 @@ class Api
         if ($errno != JSON_ERROR_NONE) {
             throw new JsonDecodeException($this->response, $error, $errno);
         }
+
+        if (env('DEBUG', false)) {
+            rewind($stream);
+            echo stream_get_contents($stream) . "\n";
+            echo "Request data: " . print_r($fields, 1);
+            echo "Response: " . var_export($this->response, 1) . "\n";
+        }
+
 
         return $result;
     }

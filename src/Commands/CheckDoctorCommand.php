@@ -25,7 +25,7 @@ class CheckDoctorCommand extends Command
     {
 
         try {
-            (new \KubanOnline\Service)->check('6613');
+            (new \KubanOnline\Service)->check($input->getArgument('doctor'));
         } catch (JsonDecodeException $exception) {
             echo 'ex: ' . $exception->getResponse();
         }

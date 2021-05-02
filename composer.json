@@ -1,0 +1,14 @@
+{
+    "name": "shahruslan/kuban-online",
+    "description": "",
+    "require": {
+        "symfony/console": "^5.2",
+        "vlucas/phpdotenv": "^5.3",
+        "symfony/cache": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "KubanOnline\\": "src"
+        }
+    }
+}

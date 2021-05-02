@@ -17,7 +17,7 @@ class Service
     public function __construct()
     {
         $this->api = new Api();
-        $this->cache = new FilesystemAdapter('', 3600, 'cache');
+        $this->cache = new FilesystemAdapter('', env('CACHE_TIME', 86400), 'cache');
     }
 
     public function check(string $doctorId, bool $force = false)

@@ -5,6 +5,8 @@ namespace KubanOnline;
 
 
 
+use Longman\TelegramBot\Request;
+use Longman\TelegramBot\Telegram;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class Service
@@ -35,9 +37,9 @@ class Service
         $prevStatus = $this->getPrevStatus($status, $doctorId);
 
         if ($force === true) {
-            $this->notify($status->statusText());
+            $this->notify($status->statusText(), $doctorId);
         } elseif ($prevStatus == null || $prevStatus->status() != $status->status()) {
-            $this->notify($status->statusText($prevStatus));
+            $this->notify($status->statusText($prevStatus), $doctorId);
         }
     }
 
@@ -79,8 +81,19 @@ class Service
         return null;
     }
 
-    private function notify(string $text)
+    private function notify(string $text, $doctorId)
     {
-        echo $text . "\n";
+        $doctors = config('doctors', []);
+
+        if (array_key_exists($doctorId, $doctors)) {
+            $text = "Доктор {$doctors[$doctorId]} - $text";
+        }
+
+        new Telegram(env('TELEGRAM_BOT_API'), env('TELEGRAM_BOT_NAME'));
+
+        Request::sendMessage([
+            'chat_id' => env('TELEGRAM_CHAT_ID'),
+            'text' => $text,
+        ]);
     }
 }

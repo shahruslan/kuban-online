@@ -49,7 +49,6 @@ class Status
         ];
 
         $key = ($prevStatus ? $prevStatus->status() . '-' : '') . $this->status();
-//        $key = $prevStatus->status() . '-' . $this->status();
 
         return $data[$key];
     }

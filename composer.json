@@ -2,6 +2,9 @@
     "name": "shahruslan/kuban-online",
     "description": "",
     "require": {
+        "php": "^7.4",
+        "ext-curl": "*",
+        "ext-json": "*",
         "symfony/console": "^5.2",
         "vlucas/phpdotenv": "^5.3",
         "symfony/cache": "^5.2",

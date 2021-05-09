@@ -13,11 +13,15 @@ class Service
 {
     private Api $api;
     private FilesystemAdapter $cache;
+    private string $clinicId;
+    private string $patientId;
 
     public function __construct()
     {
         $this->api = new Api();
         $this->cache = new FilesystemAdapter('', env('CACHE_TIME', 86400), 'cache');
+        $this->clinicId = (string)env('CLINIC_ID');
+        $this->patientId = (string)env('PATIENT_ID');
     }
 
     public function check(string $doctorId, bool $force = false)
@@ -28,7 +32,7 @@ class Service
 
 
         try {
-            $result = $this->api->getSpecialistTimes($doctorId, env('CLINIC_ID'), env('PATIENT_ID'));
+            $result = $this->api->getSpecialistTimes($doctorId, $this->clinicId, $this->patientId);
             $status = $result['success'] ? Status::makeOpen() : Status::makeClose();
         } catch (\RuntimeException $exception) {
             $status = Status::makeError();

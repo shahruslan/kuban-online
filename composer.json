@@ -9,7 +9,8 @@
         "vlucas/phpdotenv": "^5.3",
         "symfony/cache": "^5.2",
         "hassankhan/config": "^2.2",
-        "longman/telegram-bot": "^0.72.0"
+        "longman/telegram-bot": "^0.72.0",
+        "spatie/data-transfer-object": "^2.8"
     },
     "autoload": {
         "psr-4": {

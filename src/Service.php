@@ -5,6 +5,7 @@ namespace KubanOnline;
 
 
 
+use KubanOnline\Dto\Speciality;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -45,6 +46,31 @@ class Service
         } elseif ($prevStatus == null || $prevStatus->status() != $status->status()) {
             $this->notify($status->statusText($prevStatus), $doctorId);
         }
+    }
+
+    /**
+     * @return array|Speciality[]
+     */
+    public function specialities(): array
+    {
+        $result = [];
+
+        $data = $this->api->getSpecialityList($this->clinicId, $this->patientId);
+
+        if ($data['success'] == false) {
+            $message = array_pop($data['error']);
+            throw new \RuntimeException($message);
+        }
+
+        foreach ($data['response'] as $item) {
+            $result[] = new Speciality([
+                'id' => $item['IdSpesiality'],
+                'name' => $item['NameSpesiality'],
+                'tickets' => (int)$item['CountFreeTicket'],
+            ]);
+        }
+
+        return $result;
     }
 
     private function checkDate(): bool

@@ -114,16 +114,21 @@ class Service
 
         $cacheItem = $this->cache->getItem($key);
 
-        if ($cacheItem->isHit()) {
-            /** @var Status $prevStatus */
-            $prevStatus = $cacheItem->get();
-            return $prevStatus;
+        if ($cacheItem->isHit() == false) {
+            $cacheItem->set($status);
+            $this->cache->save($cacheItem);
+            return null;
         }
 
-        $cacheItem->set($status);
-        $this->cache->save($cacheItem);
+        /** @var Status $prevStatus */
+        $prevStatus = $cacheItem->get();
 
-        return null;
+        if ($prevStatus->status() != $status->status()) {
+            $cacheItem->set($status);
+            $this->cache->save($cacheItem);
+        }
+
+        return $prevStatus;
     }
 
     private function notify(string $text, $doctorId)

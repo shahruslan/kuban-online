@@ -19,7 +19,7 @@ class CheckDoctorCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Доступность записи к врачу.')
+            ->setDescription('Доступность записи к врачу')
             ->setHelp('Проверяет доступность записи к врачу и уведомляет о состоянии')
             ->addArgument('doctor', InputArgument::REQUIRED, 'Идентификатор доктора')
             ->addOption('force', 'f',  InputOption::VALUE_NONE, 'Принудительный показ статуса')

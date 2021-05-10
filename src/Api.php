@@ -9,8 +9,6 @@ use KubanOnline\Exceptions\JsonDecodeException;
 
 class Api
 {
-    private string $response;
-
     private function query(string $path, array $fields = []): array
     {
         $url = 'https://kuban-online.ru/api' . $path;
@@ -33,7 +31,7 @@ class Api
             curl_setopt($ch, CURLOPT_STDERR, $stream);
         }
 
-        $this->response = curl_exec($ch);
+        $response = curl_exec($ch);
         $error = curl_error($ch);
         $errno = curl_errno($ch);
 
@@ -47,21 +45,21 @@ class Api
         }
 
 
-        $result = json_decode($this->response, true);
+        $result = json_decode($response, true);
         $errno = json_last_error();
         $error = json_last_error_msg();
 
-        if ($errno != JSON_ERROR_NONE) {
-            throw new JsonDecodeException($this->response, $error, $errno);
-        }
 
         if (env('DEBUG', false)) {
             rewind($stream);
             echo stream_get_contents($stream) . "\n";
             echo "Request data: " . print_r($fields, 1);
-            echo "Response: " . var_export($this->response, 1) . "\n";
+            echo "Response: " . var_export($response, 1) . "\n";
         }
 
+        if ($errno != JSON_ERROR_NONE) {
+            throw new JsonDecodeException($response, $error, $errno);
+        }
 
         return $result;
     }

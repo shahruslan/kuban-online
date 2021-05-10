@@ -5,6 +5,7 @@ namespace KubanOnline;
 
 
 
+use KubanOnline\Dto\Doctor;
 use KubanOnline\Dto\Speciality;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
@@ -56,16 +57,30 @@ class Service
         $result = [];
 
         $data = $this->api->getSpecialityList($this->clinicId, $this->patientId);
-
-        if ($data['success'] == false) {
-            $message = array_pop($data['error']);
-            throw new \RuntimeException($message);
-        }
+        $this->checkError($data);
 
         foreach ($data['response'] as $item) {
             $result[] = new Speciality([
                 'id' => $item['IdSpesiality'],
                 'name' => $item['NameSpesiality'],
+                'tickets' => (int)$item['CountFreeTicket'],
+            ]);
+        }
+
+        return $result;
+    }
+
+    public function doctors(string $specialityId): array
+    {
+        $result = [];
+
+        $data = $this->api->getDoctorList($specialityId, $this->clinicId, $this->patientId);
+        $this->checkError($data);
+
+        foreach ($data['response'] as $item) {
+            $result[] = new Doctor([
+                'id' => $item['IdDoc'],
+                'name' => $item['Name'],
                 'tickets' => (int)$item['CountFreeTicket'],
             ]);
         }
@@ -125,5 +140,19 @@ class Service
             'chat_id' => env('TELEGRAM_CHAT_ID'),
             'text' => $text,
         ]);
+    }
+
+    private function checkError(array $response)
+    {
+        if ($response['success'] !== false) {
+            return;
+        }
+
+        if (array_key_exists('ErrorDescription', $response['error'])) {
+            throw new \RuntimeException($response['error']['ErrorDescription'], $response['error']['IdError']);
+        }
+
+        $message = array_pop($response['error']);
+        throw new \RuntimeException($message);
     }
 }

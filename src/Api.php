@@ -90,4 +90,16 @@ class Api
 
         return $this->query('/speciality_list/', $data);
     }
+
+    public function getDoctorList(string $specialityId,  string $clinicId, string $patientId): array
+    {
+        $data = [
+            'speciality_form-speciality_id' => $specialityId,
+            'speciality_form-clinic_id' => $clinicId,
+            'speciality_form-patient_id' => $patientId,
+            'speciality_form-history_id' => '',
+        ];
+
+        return $this->query('/doctor_list/', $data);
+    }
 }

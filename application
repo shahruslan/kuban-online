@@ -6,6 +6,7 @@ $application = new Symfony\Component\Console\Application();
 
 $application->add(new KubanOnline\Commands\CheckDoctorCommand());
 $application->add(new KubanOnline\Commands\ShowSpecialityListCommand());
+$application->add(new KubanOnline\Commands\ShowDoctorListCommand());
 
 $application->run();
 

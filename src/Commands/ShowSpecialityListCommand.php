@@ -13,7 +13,7 @@ class ShowSpecialityListCommand extends Command
 {
     private Service $service;
 
-    protected static string $defaultName = 'speciality:list';
+    protected static $defaultName = 'speciality:list';
 
     protected function configure(): void
     {

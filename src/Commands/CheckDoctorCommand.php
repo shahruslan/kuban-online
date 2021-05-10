@@ -14,7 +14,7 @@ class CheckDoctorCommand extends Command
 {
     private Service $service;
 
-    protected static string $defaultName = 'doctor:check';
+    protected static $defaultName = 'doctor:check';
 
     protected function configure(): void
     {

@@ -14,7 +14,7 @@ class ShowDoctorListCommand extends Command
 {
     private Service $service;
 
-    protected static string $defaultName = 'doctor:list';
+    protected static $defaultName = 'doctor:list';
 
     protected function configure(): void
     {

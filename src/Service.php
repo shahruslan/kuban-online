@@ -21,14 +21,14 @@ class Service
     public function __construct()
     {
         $this->api = new Api();
-        $this->cache = new FilesystemAdapter('', env('CACHE_TIME', 86400), 'cache');
+        $this->cache = new FilesystemAdapter('', env('CACHE_TIME', 86400), dirname(__DIR__) . '/cache');
         $this->clinicId = (string)env('CLINIC_ID');
         $this->patientId = (string)env('PATIENT_ID');
     }
 
     public function check(string $doctorId, bool $force = false)
     {
-        if ($force === true && $this->checkDate() == false) {
+        if ($this->checkDate() == false && $force == false) {
             return;
         }
 
